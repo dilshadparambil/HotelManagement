@@ -1,0 +1,113 @@
+<div class="container page-layout">
+
+  <aside class="filters-sidebar">
+    <div class="filter-card">
+      <h3>Your Search</h3>
+      <div class="search-summary">
+        <div class="summary-item">
+          <label>Destination</label>
+          <p class="fw-bold text-primary">{{ filters.destination || 'All Destinations' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <h3>Filter by</h3>
+
+      <div class="filter-group">
+        <h4>Price Range (Max: ${{ filters.maxPrice }})</h4>
+        <input type="range" class="range-slider" min="50" max="1000" step="50" [(ngModel)]="filters.maxPrice">
+        <div class="range-labels">
+          <span>$50</span>
+          <span>$1000+</span>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <h4>Star Rating</h4>
+        <label class="checkbox-label">
+          <input type="radio" name="rating" [(ngModel)]="filters.minRating" [value]="0"> All
+        </label>
+        <label class="checkbox-label">
+          <input type="radio" name="rating" [(ngModel)]="filters.minRating" [value]="5"> 5 Stars
+        </label>
+        <label class="checkbox-label">
+          <input type="radio" name="rating" [(ngModel)]="filters.minRating" [value]="4"> 4 Stars & Up
+        </label>
+        <label class="checkbox-label">
+          <input type="radio" name="rating" [(ngModel)]="filters.minRating" [value]="3"> 3 Stars & Up
+        </label>
+      </div>
+      <button class="btn-primary w-100" (click)="loadHotels()">
+        Apply Filters
+      </button>
+    </div>
+  </aside>
+
+  <main class="results-content">
+    <div class="results-header">
+      <h3>{{ hotels.length }} hotels found</h3>
+      <div class="sort-box">
+        <label>Sort by:</label>
+        <select [(ngModel)]="filters.sortBy" (change)="loadHotels()">
+          <option value="Recommended">Recommended (Rating)</option>
+          <option value="Price">Price (Low to High)</option>
+        </select>
+      </div>
+    </div>
+
+    @if (isLoading) {
+    <div class="loading-state">
+      <i class="fa-solid fa-circle-notch fa-spin"></i> Finding best hotels...
+    </div>
+    } @else {
+
+    @if (hotels.length === 0) {
+    <div class="no-results">
+      <i class="fa-solid fa.magnifying-glass-location"></i>
+      <h3>No hotels found for your criteria</h3>
+      <p>Try adjusting your price, rating, or dates.</p>
+    </div>
+    }
+
+    @else {
+    <div class="hotel-list">
+      @for (hotel of hotels; track hotel.id) {
+      <div class="hotel-card">
+        <div class="card-image">
+          <img [src]="hotel.imageUrl" alt="Hotel Image">
+        </div>
+        <div class="card-details">
+          <div class="details-top">
+            <h4>{{ hotel.name }}</h4>
+            <div class="rating">
+              @for (i of [1,2,3,4,5]; track i) {
+              <i class="fa-star" [class.fa-solid]="i <= hotel.rating" [class.fa-regular]="i > hotel.rating"></i>
+              }
+              <span class="rating-text">({{ hotel.rating.toFixed(1) }})</span>
+            </div>
+            <p class="location"><i class="fa-solid fa-location-dot"></i> {{ hotel.city }}, {{ hotel.country }}</p>
+          </div>
+
+          <div class="details-bottom">
+            <div class="price-box">
+              @if (hotel.minPrice > 0) {
+              <span class="unit">From</span>
+              <span class="price">${{ hotel.minPrice }}</span>
+              <span class="unit">per night</span>
+              } @else {
+              <span class="price text-danger">Sold Out</span>
+              }
+            </div>
+          <button class="btn-view" [routerLink]="['/hotel', hotel.id]" queryParamsHandling="preserve">
+            View Details
+          </button>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+    }
+  </main>
+</div>

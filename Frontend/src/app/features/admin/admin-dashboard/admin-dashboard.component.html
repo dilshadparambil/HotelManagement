@@ -1,0 +1,40 @@
+<div class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fa-solid fa-shield-halved"></i> AdminPanel
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="hotels" routerLinkActive="active">
+        <i class="fa-solid fa-hotel"></i> Hotels
+      </a>
+      <a routerLink="rooms" routerLinkActive="active">
+        <i class="fa-solid fa-door-open"></i> Rooms
+      </a>
+      <a routerLink="room-types" routerLinkActive="active">
+        <i class="fa-solid fa-bed"></i> Room Types
+      </a>
+      <a routerLink="bookings" routerLinkActive="active">
+        <i class="fa-solid fa-calendar-check"></i> Bookings
+      </a>
+      <a routerLink="employees" routerLinkActive="active">
+        <i class="fa-solid fa-users-gear"></i> Employees
+      </a>
+      <a routerLink="customers" routerLinkActive="active">
+        <i class="fa-solid fa-user-group"></i> Customers
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button (click)="logout()" class="btn-logout">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

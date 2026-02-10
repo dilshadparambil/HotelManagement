@@ -1,0 +1,72 @@
+<div class="success-page">
+
+  @if (isLoading) {
+    <div class="loading-state">Generaing Receipt...</div>
+  } @else if (booking) {
+
+    <div class="receipt-card">
+      <div class="icon-container">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+
+      <h2>Booking Confirmed!</h2>
+      <p class="subtitle">Thank you for your reservation. We look forward to hosting you.</p>
+
+      <div class="divider"></div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <label>Booking ID</label>
+          <p>#{{ booking.id }}</p>
+        </div>
+        <div class="detail-item">
+          <label>Guest Name</label>
+          <p>{{ booking.customerName }}</p>
+        </div>
+        <div class="detail-item">
+          <label>Room</label>
+          <p>{{ booking.roomNumber }}</p>
+        </div>
+        <div class="detail-item">
+          <label>Status</label>
+          <span class="status-badge">{{ booking.status === 0 ? 'Pending' : 'Confirmed' }}</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="dates-row">
+        <div class="date-box">
+          <label>Check-in</label>
+          <p>{{ booking.checkInDate | date:'mediumDate' }}</p>
+        </div>
+        <div class="arrow">
+          <i class="fa-solid fa-arrow-right"></i>
+        </div>
+        <div class="date-box">
+          <label>Check-out</label>
+          <p>{{ booking.checkOutDate | date:'mediumDate' }}</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="actions">
+        <button class="btn-primary" (click)="printPage()">
+          <i class="fa-solid fa-print"></i> Print Receipt
+        </button>
+        <button class="btn-outline" routerLink="/">
+          Return Home
+        </button>
+      </div>
+
+    </div>
+
+  } @else {
+    <div class="error-state">
+      <h3>Booking not found</h3>
+      <button routerLink="/" class="btn-primary">Go Home</button>
+    </div>
+  }
+
+</div>

@@ -1,0 +1,171 @@
+<div class="page-header">
+  <h2>Manage Rooms</h2>
+  <button class="btn-add" (click)="openAddModal()">
+    <i class="fa-solid fa-plus"></i> Add Room
+  </button>
+
+  <div class="search-bar">
+    <input type="number" placeholder="Search ID..." [(ngModel)]="searchId">
+    <button class="btn-search" (click)="searchRoom()">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    @if (isSearching) {
+      <button class="btn-reset" (click)="resetSearch()">
+        <i class="fa-solid fa-rotate-left"></i> Reset
+      </button>
+    }
+  </div>
+</div>
+
+@if (isLoading) {
+  <div class="loading-state">Loading...</div>
+} @else {
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Room No</th>
+          <th>Hotel</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (room of rooms; track room.id) {
+          <tr>
+            <td>#{{ room.id }}</td>
+            <td class="fw-bold">{{ room.roomNumber }}</td>
+            <td>{{ room.hotelName }}</td>
+            <td>{{ room.roomType }}</td>
+            <td>${{ room.pricePerNight }}</td>
+            <td>
+              <span class="status-badge status-{{room.status}}">
+                {{ getStatusLabel(room.status) }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon edit" (click)="openEditModal(room)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deleteRoom(room.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    @if (rooms.length === 0) {
+      <div class="empty-state">
+        No rooms found. Click "Add Room" to create one.
+      </div>
+    }
+  </div>
+}
+
+@if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>{{ isEditing ? 'Edit Room' : 'Add New Room' }}</h3>
+        <button class="btn-close" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form (ngSubmit)="roomForm.form.valid && saveRoom()" #roomForm="ngForm">
+
+        <div class="form-group">
+          <label>Room Number <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="currentRoom.roomNumber"
+            name="roomNumber"
+            required
+            #roomNumCtrl="ngModel"
+            [class.is-invalid]="roomNumCtrl.invalid && (roomNumCtrl.dirty || roomNumCtrl.touched)"
+          >
+          @if (roomNumCtrl.invalid && (roomNumCtrl.dirty || roomNumCtrl.touched)) {
+            <div class="error-text">Room Number is required.</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Hotel <span class="text-danger">*</span></label>
+          <select
+            [(ngModel)]="currentRoom.hotelClassId"
+            name="hotelClassId"
+            required
+            #hotelCtrl="ngModel"
+            [class.is-invalid]="hotelCtrl.invalid && (hotelCtrl.dirty || hotelCtrl.touched)"
+          >
+            <option [ngValue]="null" disabled>Select a Hotel</option>
+            @for (hotel of hotels; track hotel.id) {
+              <option [ngValue]="hotel.id">{{ hotel.name }}</option>
+            }
+          </select>
+          @if (hotelCtrl.invalid && (hotelCtrl.dirty || hotelCtrl.touched)) {
+            <div class="error-text">Please select a hotel.</div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Room Type <span class="text-danger">*</span></label>
+          <select
+            [(ngModel)]="currentRoom.roomTypeId"
+            name="roomTypeId"
+            required
+            #typeCtrl="ngModel"
+            [class.is-invalid]="typeCtrl.invalid && (typeCtrl.dirty || typeCtrl.touched)"
+          >
+            <option [ngValue]="null" disabled>Select a Room Type</option>
+            @for (type of roomTypes; track type.id) {
+              <option [ngValue]="type.id">{{ type.typeName }}</option>
+            }
+          </select>
+          @if (typeCtrl.invalid && (typeCtrl.dirty || typeCtrl.touched)) {
+            <div class="error-text">Please select a room type.</div>
+          }
+        </div>
+
+        <div class="row">
+          <div class="col form-group">
+            <label>Price ($) <span class="text-danger">*</span></label>
+            <input
+              type="number"
+              [(ngModel)]="currentRoom.pricePerNight"
+              name="pricePerNight"
+              required
+              min="1"
+              #priceCtrl="ngModel"
+              [class.is-invalid]="priceCtrl.invalid && (priceCtrl.dirty || priceCtrl.touched)"
+            >
+            @if (priceCtrl.invalid && (priceCtrl.dirty || priceCtrl.touched)) {
+              <div class="error-text">
+                @if (priceCtrl.errors?.['required']) { Price is required. }
+                @if (priceCtrl.errors?.['min']) { Price must be greater than 0. }
+              </div>
+            }
+          </div>
+
+          <div class="col form-group">
+            <label>Status <span class="text-danger">*</span></label>
+            <select [(ngModel)]="currentRoom.status" name="status" required>
+              @for (opt of statusOptions; track opt.value) {
+                <option [ngValue]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn-save" [disabled]="roomForm.invalid">Save Room</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

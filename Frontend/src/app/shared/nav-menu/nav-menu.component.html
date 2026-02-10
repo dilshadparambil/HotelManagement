@@ -1,0 +1,22 @@
+<header class="main-header">
+  <div class="container header-content">
+
+    <div class="logo" routerLink="/">
+      <i class="fa-solid fa-hotel"></i> Stay<span>Hub</span>
+    </div>
+
+    @if (currentUser$ | async; as user) {
+      <div class="header-auth-links">
+        <span class="welcome-text">Welcome, {{ user.name }}!</span>
+
+        <button (click)="logout()" class="btn-primary-solid">Logout</button>
+      </div>
+    } @else {
+      <div class="header-auth-links">
+        <a (click)="goToLogin()" class="btn-login-link" style="cursor: pointer;">Sign In</a>
+        <a routerLink="/signup" class="btn-primary-solid">Sign Up</a>
+      </div>
+    }
+
+  </div>
+</header>

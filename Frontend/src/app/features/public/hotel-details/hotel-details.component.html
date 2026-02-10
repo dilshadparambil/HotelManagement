@@ -1,0 +1,124 @@
+@if (isLoading) {
+<div class="loading-container">
+  <i class="fa-solid fa-circle-notch fa-spin"></i> Loading hotel details...
+</div>
+} @else if (hotel) {
+
+<main class="container details-page">
+
+  <nav class="breadcrumbs">
+    <a routerLink="/">Home</a> &gt;
+    <a routerLink="/search">{{ hotel.city }}</a> &gt;
+    <span>{{ hotel.name }}</span>
+  </nav>
+
+  <div class="details-header">
+    <div>
+      <h1>{{ hotel.name }}</h1>
+      <p class="location">
+        <i class="fa-solid fa-location-dot"></i> {{ hotel.address }}, {{ hotel.city }}, {{ hotel.country }}
+      </p>
+    </div>
+
+    @if(minPrice > 0) {
+    <div class="price-box">
+      <span class="unit">From</span>
+      <span class="price">${{ minPrice }}</span>
+      <span class="unit">/ night</span>
+
+      <button class="btn-book" (click)="scrollToRooms()">Book Now</button>
+    </div>
+    }
+  </div>
+
+  <section class="gallery-grid">
+    <div class="main-img">
+      <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/61c457d9b7-b89f13f8ac96b7b8d107.png"
+        alt="Main View">
+    </div>
+    <div class="sub-img">
+      <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/a4f3085a81-b49bd0c73c8d28c50627.png"
+        alt="Bathroom">
+    </div>
+    <div class="sub-img">
+      <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/d0cba0a845-e14f38ea10bbccd7c64a.png"
+        alt="Rooftop">
+    </div>
+    <div class="sub-img">
+      <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/4e48217c1e-409ec8b5fdc11bd268c6.png" alt="Pool">
+    </div>
+    <div class="sub-img relative">
+      <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/00e227996a-6342711a0035f2986249.png"
+        alt="Lobby">
+      <div class="view-all">
+        <i class="fa-solid fa-images"></i> View All Photos
+      </div>
+    </div>
+  </section>
+
+  <div class="content-grid">
+
+    <div class="left-column">
+      <h3>About this hotel</h3>
+      <p>
+        Experience luxury at {{ hotel.name }} in the heart of {{ hotel.city }}.
+        Perfect for business and leisure travelers alike. Enjoy world-class amenities
+        and stunning views.
+      </p>
+      <p class="mt-2 text-muted">
+        <i class="fa-solid fa-location-dot"></i> {{ hotel.address }}
+      </p>
+    </div>
+
+    <div class="right-column">
+      <div class="amenities-card">
+        <h4>Popular Amenities</h4>
+        <ul class="amenities-list">
+          <li><i class="fa-solid fa-wifi"></i> Free WiFi</li>
+          <li><i class="fa-solid fa-person-swimming"></i> Pool</li>
+          <li><i class="fa-solid fa-square-parking"></i> Parking</li>
+          <li><i class="fa-solid fa-martini-glass"></i> Bar</li>
+          <li><i class="fa-solid fa-dumbbell"></i> Gym</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <section id="rooms-section" class="rooms-section mt-5">
+    <h2>Available Rooms</h2>
+
+    @if (availableRoomTypes.length > 0) {
+    <div class="rooms-grid">
+      @for (room of availableRoomTypes; track room.typeId) {
+      <div class="room-card">
+        <div class="room-info">
+          <h3>{{ room.typeName }}</h3>
+          <p class="room-price">${{ room.price }} <span class="text-muted">/ night</span></p>
+          <ul class="room-features">
+            <li><i class="fa-solid fa-user"></i> {{ room.capacity }} Guests</li>
+            <li><i class="fa-solid fa-info-circle"></i> {{ room.description }}</li>
+          </ul>
+        </div>
+        <div class="room-action">
+          <button class="btn-select" (click)="selectRoom(room)">
+            Select Room
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="alert alert-info">
+      Sorry, no rooms are available at this hotel right now.
+    </div>
+    }
+  </section>
+
+</main>
+} @else {
+<div class="error-container">
+  <h2>Hotel not found</h2>
+  <button routerLink="/search" class="btn-primary">Back to Search</button>
+</div>
+}

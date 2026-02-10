@@ -1,0 +1,158 @@
+<div class="page-header">
+  <h2>Manage Customers</h2>
+  <button class="btn-add" (click)="openAddModal()">
+    <i class="fa-solid fa-plus"></i> Add Customer
+  </button>
+
+  <div class="search-bar">
+    <input type="number" placeholder="Search by ID..." [(ngModel)]="searchId">
+    <button class="btn-search" (click)="searchCustomer()">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+    @if (isSearching) {
+      <button class="btn-reset" (click)="resetSearch()">
+        <i class="fa-solid fa-rotate-left"></i> Reset
+      </button>
+    }
+  </div>
+</div>
+
+@if (isLoading) {
+  <div class="loading-state">
+    <i class="fa-solid fa-circle-notch fa-spin"></i> Loading customers...
+  </div>
+} @else {
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>ID Proof</th> <th class="actions-col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (customer of customers; track customer.id) {
+          <tr>
+            <td>#{{ customer.id }}</td>
+            <td class="fw-bold">{{ customer.fullName }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>{{ customer.idProofNumber }}</td> <td>
+              <div class="action-buttons">
+                <button class="btn-icon edit" (click)="openEditModal(customer)">
+                  <i class="fa-solid fa-pen"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deleteCustomer(customer.id)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (customers.length === 0) {
+      <div class="empty-state">
+        No customers found. Click "Add Customer" to create one.
+      </div>
+    }
+  </div>
+}
+
+@if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>{{ isEditing ? 'Edit Customer' : 'Add New Customer' }}</h3>
+        <button class="btn-close" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form (ngSubmit)="customerForm.form.valid && saveCustomer()" #customerForm="ngForm">
+
+        <div class="form-group">
+          <label>Full Name <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            [(ngModel)]="currentCustomer.fullName"
+            name="fullName"
+            required
+            minlength="3"
+            #nameCtrl="ngModel"
+            [class.is-invalid]="nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)"
+          >
+          @if (nameCtrl.invalid && (nameCtrl.dirty || nameCtrl.touched)) {
+            <div class="error-text">
+              @if (nameCtrl.errors?.['required']) { Name is required. }
+              @if (nameCtrl.errors?.['minlength']) { Name must be at least 3 characters. }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email <span class="text-danger">*</span></label>
+          <input
+            type="email"
+            [(ngModel)]="currentCustomer.email"
+            name="email"
+            required
+            email
+            #emailCtrl="ngModel"
+            [class.is-invalid]="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)"
+          >
+          @if (emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)) {
+            <div class="error-text">
+              @if (emailCtrl.errors?.['required']) { Email is required. }
+              @if (emailCtrl.errors?.['email']) { Please enter a valid email address. }
+            </div>
+          }
+        </div>
+
+        <div class="row">
+          <div class="col form-group">
+            <label>Phone <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              [(ngModel)]="currentCustomer.phoneNumber"
+              name="phoneNumber"
+              required
+              pattern="^[0-9\-\+\s]+$"
+              #phoneCtrl="ngModel"
+              [class.is-invalid]="phoneCtrl.invalid && (phoneCtrl.dirty || phoneCtrl.touched)"
+            >
+            @if (phoneCtrl.invalid && (phoneCtrl.dirty || phoneCtrl.touched)) {
+              <div class="error-text">
+                @if (phoneCtrl.errors?.['required']) { Phone is required. }
+                @if (phoneCtrl.errors?.['pattern']) { Invalid phone format. }
+              </div>
+            }
+          </div>
+
+          <div class="col form-group">
+            <label>ID Proof <span class="text-danger">*</span></label>
+            <input
+              type="text"
+              [(ngModel)]="currentCustomer.idProofNumber"
+              name="idProofNumber"
+              required
+              #proofCtrl="ngModel"
+              [class.is-invalid]="proofCtrl.invalid && (proofCtrl.dirty || proofCtrl.touched)"
+            >
+            @if (proofCtrl.invalid && (proofCtrl.dirty || proofCtrl.touched)) {
+              <div class="error-text">ID Proof is required.</div>
+            }
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn-save" [disabled]="customerForm.invalid">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

@@ -1,0 +1,113 @@
+<section class="hero-section">
+  <div class="hero-background">
+    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/373a85be7e-505833d100ea28812cf1.png" alt="Luxury hotel" />
+    <div class="overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="search-widget">
+
+      <div class="search-grid">
+        <div class="form-group destination-group">
+          <label>Destination</label>
+          <div class="input-wrapper">
+            <span class="input-icon"><i class="fa-solid fa-location-dot"></i></span>
+            <input type="text" placeholder="e.g. New York" [(ngModel)]="searchCriteria.destination">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Check-in</label>
+          <div class="input-wrapper">
+            <input type="date" [(ngModel)]="searchCriteria.checkIn">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Check-out</label>
+          <div class="input-wrapper">
+            <input type="date" [(ngModel)]="searchCriteria.checkOut">
+          </div>
+        </div>
+
+        </div>
+
+      <button class="btn-search" (click)="onSearch()">
+        <i class="fa-solid fa-magnifying-glass"></i> Search Hotels
+      </button>
+
+    </div>
+  </div>
+</section>
+
+<section class="destinations-section">
+  <div class="container">
+    <h3 class="section-title">Popular Destinations</h3>
+
+    <div class="destinations-grid">
+      <div class="destination-card" (click)="searchByCity('Paris')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/f409c2330e-304ee66696ec36d15cb8.png" alt="Paris">
+        </div>
+        <div class="card-body">
+          <p>Paris</p>
+        </div>
+      </div>
+
+      <div class="destination-card" (click)="searchByCity('Tokyo')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/1d76048790-b539db1d6ca8b5113728.png" alt="Tokyo">
+        </div>
+        <div class="card-body">
+          <p>Tokyo</p>
+        </div>
+      </div>
+
+      <div class="destination-card" (click)="searchByCity('Santorini')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/3898dddfb8-5778a11f65f2553ed24c.png" alt="Santorini">
+        </div>
+        <div class="card-body">
+          <p>Santorini</p>
+        </div>
+      </div>
+
+      <div class="destination-card" (click)="searchByCity('New York')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/b4e2f0e0fd-678d898510b173b268ea.png" alt="New York">
+        </div>
+        <div class="card-body">
+          <p>New York</p>
+        </div>
+      </div>
+
+      <div class="destination-card" (click)="searchByCity('Sydney')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/0bc2258003-106200db792d04ebfa6b.png" alt="Sydney">
+        </div>
+        <div class="card-body">
+          <p>Sydney</p>
+        </div>
+      </div>
+
+      <div class="destination-card" (click)="searchByCity('Rome')">
+        <div class="card-image">
+          <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/7ffae401bb-91e1315d72465c971bf5.png" alt="Rome">
+        </div>
+        <div class="card-body">
+          <p>Rome</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="main-footer">
+  <div class="container footer-content">
+    <p>&copy; 2025 StayHub. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+      <a href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>

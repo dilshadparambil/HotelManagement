@@ -1,0 +1,41 @@
+/* 1. Global Reset & Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Colors */
+  --primary-color: rgb(33, 88, 226);
+
+  /* A slightly darker version for hover effects */
+  --primary-hover: rgb(28, 75, 195);
+
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --bg-light: #f3f4f6;
+  --white: #ffffff;
+  --border-color: #e5e7eb;
+
+  /* Spacing */
+  --container-width: 1200px;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+}
+
+/* ... rest of the file remains the same ... */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}

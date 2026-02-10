@@ -1,0 +1,85 @@
+<div class="container page-layout">
+
+  @if (isLoading) {
+    <div class="loading-state">Loading Checkout...</div>
+  } @else if (room && loggedInCustomer) {
+
+    <div class="checkout-form">
+      <h2>Secure Checkout</h2>
+
+      <form (ngSubmit)="checkoutForm.form.valid && confirmBooking()" #checkoutForm="ngForm">
+
+        <div class="form-section">
+          <h3>1. Your Dates</h3>
+          <div class="row">
+            <div class="form-group col">
+              <label>Check-in</label>
+              <input type="date" [(ngModel)]="bookingDates.checkInDate" name="checkIn" required [min]="today">
+            </div>
+            <div class="form-group col">
+              <label>Check-out</label>
+              <input type="date" [(ngModel)]="bookingDates.checkOutDate" name="checkOut" required [disabled]="!bookingDates.checkInDate" [min]="bookingDates.checkInDate">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>2. Guest Details</h3>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" [value]="loggedInCustomer.fullName" name="fullName" disabled>
+            </div>
+            <div class="row">
+              <div class="col form-group">
+                <label>Email</label>
+                <input type="text" [value]="loggedInCustomer.email" name="email" disabled>
+              </div>
+              <div class="col form-group">
+                <label>Phone</label>
+                <input type="text" [value]="loggedInCustomer.phoneNumber" name="phone" disabled>
+              </div>
+            </div>
+            <p class="text-muted small">
+              To update your details, please visit your profile.
+            </p>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-confirm" [disabled]="checkoutForm.invalid || isProcessing">
+            @if (isProcessing) {
+              <i class="fa-solid fa-circle-notch fa-spin"></i> Processing...
+            } @else {
+              Confirm Booking
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <aside class="order-summary">
+      <div class="summary-card">
+        <h3>Booking Summary</h3>
+        <div class="hotel-info">
+          <h4>{{ room.hotelName }}</h4>
+          <p class="room-type">{{ room.roomType }}</p>
+          <p class="room-number">Room #{{ room.roomNumber }}</p>
+        </div>
+        <hr>
+        <div class="price-breakdown">
+          <div class="price-row">
+            <span>Price per night</span>
+            <span>${{ room.pricePerNight }}</span>
+          </div>
+          @if (bookingDates.checkInDate && bookingDates.checkOutDate) {
+            <div class="price-row total">
+              <span>Total (Approx)</span>
+              <span>${{ calculateTotal() }}</span>
+            </div>
+          } @else {
+            <div class="price-row text-muted">Select dates to see total</div>
+          }
+        </div>
+      </div>
+    </aside>
+  }
+</div>
